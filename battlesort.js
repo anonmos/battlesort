@@ -194,7 +194,13 @@ const battleClick = (itemA,itemB) => {
 
 // console.log(quicksortBasic(array.slice())); // => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
 
+function lessThanClicked() {
+  console.log(`lessThanClicked!`)
+}
 
+function greaterThanClicked() {
+  console.log(`greaterThanClicked!`)
+}
 
 
 
