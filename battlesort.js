@@ -1,206 +1,129 @@
-// arrays to sort
-var numArray = [9, 2, 5, 6, 4, 3, 7, 2, 10, 1, 1, 1, 10, 8];
-var objArray = [{name:'Item 1', color:'blue'},
-              {name:'Item 12', color:'red'},
-              {name:'Item 4', color:'green'},
-              {name:'Item 7', color:'yellow'},
-              {name:'Item 11', color:'blue'},
-              {name:'Item 3', color:'red'},
-              {name:'Item 10', color:'green'},
-              {name:'Item 6', color:'yellow'},
-              {name:'Item 8', color:'blue'},
-              {name:'Item 9', color:'red'},
-              {name:'Item 5', color:'green'},
-              {name:'Item 2', color:'yellow'}
-              ]
-
-
-
-// Quicksort with Hoare’s partitioning scheme
-// https://itnext.io/a-sort-of-quick-guide-to-quicksort-and-hoares-partitioning-scheme-in-javascript-7792112c6d1
-function quicksort(arr, left = 0, right = arr.length - 1) {
-  if (left >= right) return;
-  const pivot = arr[Math.floor((left + right) / 2)];
-  const index = partition(arr, left, right, pivot);
-  quicksort(arr, left, index - 1);
-  quicksort(arr, index, right);
-  return arr;
-}
-
-// Original Partition Function
-function partition(arr, left, right, pivot) {
-  while (left <= right) {
-    while (arr[left] < pivot && left <= right) { // Replace  `arr[left] < pivot`  with button click to select which is greater
-      left++;
-    }
-    while (arr[right] > pivot) { // Replace  `arr[right] > pivot`  with button click to select which is greater
-      right--;
-    }
-    if (left <= right) {
-      [arr[left], arr[right]] = [arr[right], arr[left]];
-      left++;
-      right--;
-    }
-  }
-  return left;
-}
-
-
-// ************************** HERE THAR BE DRAGONS ***********************************
-
-// Buttons
-const buttonA = document.querySelector('#button_A');
-const buttonB = document.querySelector('#button_B');
-
-
-// Updated to use battlePartition, otherwise unchanged
-function battleQuicksort(arr, left = 0, right = arr.length - 1) {
-  if (left >= right) return;
-  const pivot = arr[Math.floor((left + right) / 2)];
-  const index = battlePartition(arr, left, right, pivot);
-  quicksort(arr, left, index - 1);
-  quicksort(arr, index, right);
-  return arr;
-}
-
-// New Partition Function (using buttons)
-function battlePartition(arr, left, right, pivot) {
-  while (left <= right) {
-    while (battleClick(pivot,arr[left]) && left <= right) { // Replaced logic with function (does not work)
-      left++;
-    }
-    while (battleClick(arr[right],pivot)) { // Replaced logic with function (does not work)
-      right--;
-    }
-    if (left <= right) {
-      [arr[left], arr[right]] = [arr[right], arr[left]];
-      left++;
-      right--;
-    }
-  }
-  return left;
-}
-
-// Function to make user select a winner
-const battleClick = (itemA,itemB) => {
-  // Set the Button Text
-  buttonA.innerHTML = itemA.name;
-  buttonB.innerHTML = itemB.name;
-  
-  new Promise((resolve, reject) => {
-    // Listen for itemA Clicked 
-    buttonA.addEventListener('click', () => {
-      // ItemA > ItemB?
-      resolve(1);
-    });
-    // Listen for itemB Clicked 
-    buttonB.addEventListener('click', () => {
-      // ItemA > ItemB?
-      resolve(0);
-    });
-  }).then(result => {
-    return result;
-    //console.log(result);
-  });
-}
-
-
-
-
-// // Resorting Original
-// const resort = () => {
-//   new Promise((resolve, reject) => {
-//     buttonA.addEventListener('click', () => {
-//       resolve(buttonA.innerHTML);
-//     });
-//     buttonB.addEventListener('click', () => {
-//       resolve(buttonB.innerHTML);
-//     });
-//   }).then(result => {
-//     const sortedArray = quicksort(objArray);
-//     console.log(sortedArray);
-//     resort();
-//   });
-// }
-
-
-// // New Resort
-// function userButtonChoice(itemA,itemB) {
-//   // Set the Button Text
-//   buttonA.innerHTML = itemA.name;
-//   buttonB.innerHTML = itemB.name;
-  
-//   new Promise((resolve, reject) => {
-//     // itemA Clicked 
-//     buttonA.addEventListener('click', () => {
-//       // ItemA > ItemB?
-//       resolve(1);
-//     });
-//     // itemB Clicked 
-//     buttonB.addEventListener('click', () => {
-//       // // ItemA > ItemB?
-//       resolve(0);
-//     });
-//   }).then(result => {
-//     return result;
-//     //console.log(result);
-//   });
-// }
-
-
-// Old Stuff *******************************
-
-// const userButtonChoice = (lesserItem,greaterItem) => {
-//   // Set the Button Text
-//   buttonA.innerHTML = lesserItem.name;
-//   buttonB.innerHTML = greaterItem.name;
-  
-//   new Promise((resolve, reject) => {
-//     buttonA.addEventListener('click', () => {
-//       resolve(buttonA.innerHTML);
-//     });
-//     buttonB.addEventListener('click', () => {
-//       resolve(buttonB.innerHTML);
-//     });
-//   }).then(result => {
-//     const sortedArray = quicksort(objArray);
-//     console.log(sortedArray);
-//     resort();
-//   });
-// }
-
-
-
-// Basic implementation (pivot is the first element of the array)
-// function quicksortBasic(array) {
-//   if(array.length < 2) {
-//     return array;
-//   }
-
-//   var pivot = array[0];
-//   var lesser = [];
-//   var greater = [];
-
-//   for(var i = 1; i < array.length; i++) {
-//     if(array[i] < pivot) {    // here is where the button click needs to decide it
-//       lesser.push(array[i]);
-//     } else {
-//       greater.push(array[i]);
-//     }
-//   }
-
-//   return quicksortBasic(lesser).concat(pivot, quicksortBasic(greater));
-// }
-
-// console.log(quicksortBasic(array.slice())); // => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
-
+"use strict";
+// let numberArray = [9, 2, 5, 6, 4, 3, 7, 2, 10, 1, 1, 1, 10, 8];
+let numberArray = [1, 2, 5, 6, 4, 3, 7, 5, 10, 1, 1, 1, 10, 8];
+let leftPointer = 0;
+let rightPointer = numberArray.length - 1;
+let pivot = numberArray[Math.floor((leftPointer + rightPointer) / 2)];
+let mode = 'LEFT_POINTER';
+let done = false;
 function lessThanClicked() {
-  console.log(`lessThanClicked!`)
+    if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
+        leftPointer++;
+    }
+    else if (mode === 'RIGHT_POINTER' && leftPointer <= rightPointer) {
+        if (leftPointer <= rightPointer) {
+            swapLeftWithRight();
+            mode = 'LEFT_POINTER';
+            leftPointer++;
+            rightPointer--;
+        }
+        else {
+            done = true;
+        }
+    }
+    else {
+        console.log(`SHOULD NOT GET HERE!`);
+    }
+    updateVisuals();
 }
-
 function greaterThanClicked() {
-  console.log(`greaterThanClicked!`)
+    if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
+        mode = 'RIGHT_POINTER';
+    }
+    else if (mode === 'RIGHT_POINTER' && leftPointer <= rightPointer) {
+        rightPointer--;
+    }
+    else {
+        done = true;
+    }
+    updateVisuals();
 }
-
-
-
+function swapLeftWithRight() {
+    let leftValue = numberArray[leftPointer];
+    numberArray[leftPointer] = numberArray[rightPointer];
+    numberArray[rightPointer] = leftValue;
+}
+function updateLeftPointerIndexValue() {
+    let element = document.getElementById('left-pointer-index');
+    element.innerHTML = `Left Pointer Index: ${leftPointer}`;
+}
+function updateLeftPointerValueValue() {
+    let element = document.getElementById('left-pointer-value');
+    element.innerHTML = `Left Pointer Value: ${numberArray[leftPointer]}`;
+}
+function updateRightPointerIndexValue() {
+    let element = document.getElementById('right-pointer-index');
+    element.innerHTML = `Right Pointer Index: ${rightPointer}`;
+}
+function updateRightPointerValueValue() {
+    let element = document.getElementById('right-pointer-value');
+    element.innerHTML = `Right Pointer Value: ${numberArray[rightPointer]}`;
+}
+function updatePivotValue() {
+    let element = document.getElementById('pivot-pointer-value');
+    element.innerHTML = `Pivot Pointer Value: ${numberArray[pivot]}`;
+}
+function updateArrayValue() {
+    let element = document.getElementById('array-value');
+    element.innerHTML = `${JSON.stringify(numberArray)}`;
+}
+function updateTitle() {
+    let currentPointer = mode === 'LEFT_POINTER' ? leftPointer : rightPointer;
+    let mainQuestionElement = document.getElementById('main-question');
+    let comparisonElement = document.createElement('strong');
+    mainQuestionElement.innerHTML = `Is ${numberArray[currentPointer]} greater than `;
+    comparisonElement.innerHTML = `${numberArray[pivot]}`;
+    mainQuestionElement.appendChild(comparisonElement);
+}
+function updateCurrentMode() {
+    let element = document.getElementById('current-mode');
+    element.innerHTML = `Current Mode: ${mode}`;
+}
+function updateIsDone() {
+    let element = document.getElementById('is-done');
+    element.innerHTML = `Done: ${done}`;
+}
+function setOriginalArray() {
+    let element = document.getElementById('original-array');
+    element.innerHTML = `${JSON.stringify(numberArray)} <-- Original`;
+}
+function updateVisuals() {
+    updateLeftPointerIndexValue();
+    updateRightPointerIndexValue();
+    updateLeftPointerValueValue();
+    updateRightPointerValueValue();
+    updatePivotValue();
+    updateArrayValue();
+    updateTitle();
+    updateCurrentMode();
+    updateIsDone();
+}
+window.onload = function () {
+    setOriginalArray();
+    updateVisuals();
+};
+window.quicksort = function (arr, left = 0, right = arr.length - 1) {
+    if (left >= right)
+        return;
+    const pivot = arr[Math.floor((left + right) / 2)];
+    const index = window.partition(arr, left, right, pivot);
+    window.quicksort(arr, left, index - 1);
+    window.quicksort(arr, index, right);
+    return arr;
+};
+window.partition = function (arr, left, right, pivot) {
+    while (left <= right) {
+        while (arr[left] < pivot && left <= right) { // Replace  `arr[left] < pivot`  with button click to select which is greater
+            left++;
+        }
+        while (arr[right] > pivot) { // Replace  `arr[right] > pivot`  with button click to select which is greater
+            right--;
+        }
+        if (left <= right) {
+            [arr[left], arr[right]] = [arr[right], arr[left]];
+            left++;
+            right--;
+        }
+    }
+    return left;
+};
