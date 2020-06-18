@@ -205,6 +205,32 @@
       setOriginalArray()
       updateVisuals()
     }
+
+    window.quicksort = function(arr, left = 0, right = arr.length - 1) {
+      if (left >= right) return;
+      const pivot = arr[Math.floor((left + right) / 2)];
+      const index = window.partition(arr, left, right, pivot);
+      window.quicksort(arr, left, index - 1);
+      window.quicksort(arr, index, right);
+      return arr;
+    }
+
+    window.partition = function(arr, left, right, pivot) {
+      while (left <= right) {
+        while (arr[left] < pivot && left <= right) { // Replace  `arr[left] < pivot`  with button click to select which is greater
+          left++;
+        }
+        while (arr[right] > pivot) { // Replace  `arr[right] > pivot`  with button click to select which is greater
+          right--;
+        }
+        if (left <= right) {
+          [arr[left], arr[right]] = [arr[right], arr[left]];
+          left++;
+          right--;
+        }
+      }
+      return left;
+    }
   </script>
 
 
