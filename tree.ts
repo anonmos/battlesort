@@ -1,6 +1,7 @@
 class Tree {
     private currentNode: TreeNode
     private rootNode: TreeNode
+    private gatheredLeaves: string[] = []
     constructor(arr: number[] | string[]) {
         this.rootNode = new TreeNode(arr)
         this.currentNode = this.rootNode
@@ -12,7 +13,12 @@ class Tree {
         this.currentNode.rightBeginIndex = rightBeginIndex
 
         if (this.currentNode.isLeaf()) {
-            this.currentNode = this.findNextNode(this.currentNode)
+            const potentialNextNode = this.findNextNode(this.currentNode)
+            if (!potentialNextNode) {
+                return potentialNextNode
+            }
+
+            this.currentNode = potentialNextNode
         }
         
         if (!this.currentNode.left) {
@@ -26,21 +32,44 @@ class Tree {
         }
     }
 
-    public findNextNode(node?: TreeNode): TreeNode {
+    private findNextNode(node?: TreeNode): TreeNode | undefined {
         const currentNode = node ? node : this.rootNode
         
-        if (!currentNode.left && !currentNode.isLeaf()) {
+        if ((!currentNode.left || !currentNode.right) && !currentNode.isLeaf()) {
             return currentNode
-        } else if (!currentNode.right && !currentNode.isLeaf()) {
-            return currentNode
-        } else if (currentNode.left && !currentNode.isLeaf()) {
-            return this.findNextNode(currentNode.left)
         } else if (currentNode.isLeaf()) {
-            // bad logic, figure this step out
-            return this.findNextNode(currentNode.parent?.parent?.right)
-        } else {
-            throw new Error("Traversed wrongly!")
+            return undefined
         }
+
+        let potentialNextNode = this.findNextNode(currentNode.left)
+
+        if (!potentialNextNode) {
+            return this.findNextNode(currentNode.right)
+        }
+
+        return potentialNextNode
+    }
+
+    private gatherLeaves(node: TreeNode): undefined {
+        const currentNode = node ? node : this.rootNode
+
+        if (currentNode.isLeaf()) {
+            this.gatheredLeaves.push(currentNode.arr[0].toString())
+            return
+        }
+
+        if (currentNode.left) {
+            this.gatherLeaves(currentNode.left)
+        }
+
+        if (currentNode.right) {
+            this.gatherLeaves(currentNode.right)
+        }
+    }
+
+    public getFinalArray(): string[] {
+        this.gatherLeaves(this.rootNode)
+        return this.gatheredLeaves
     }
 
 }

@@ -1,16 +1,17 @@
 "use strict";
 // let numberArray = [9, 2, 5, 6, 4, 3, 7, 2, 10, 1, 1, 1, 10, 8];
 let numberArray = [1, 2, 5, 6, 4, 3, 7, 5, 10, 1, 1, 1, 10, 8];
+const tree = new Tree(numberArray);
 let leftPointer = 0;
 let rightPointer = numberArray.length - 1;
 let pivot = numberArray[Math.floor((leftPointer + rightPointer) / 2)];
 let mode = 'LEFT_POINTER';
 let done = false;
 function lessThanClicked() {
-    if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
+    if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer && !done) {
         leftPointer++;
     }
-    else if (mode === 'RIGHT_POINTER' && leftPointer <= rightPointer) {
+    else if (mode === 'RIGHT_POINTER' && leftPointer <= rightPointer && !done) {
         if (leftPointer <= rightPointer) {
             swapLeftWithRight();
             mode = 'LEFT_POINTER';
@@ -18,8 +19,11 @@ function lessThanClicked() {
             rightPointer--;
         }
         else {
-            done = true;
+            resetBattle();
         }
+    }
+    else if (done) {
+        console.log(`DONE!`);
     }
     else {
         console.log(`SHOULD NOT GET HERE!`);
@@ -27,14 +31,20 @@ function lessThanClicked() {
     updateVisuals();
 }
 function greaterThanClicked() {
-    if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
+    if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer && !done) {
         mode = 'RIGHT_POINTER';
     }
-    else if (mode === 'RIGHT_POINTER' && leftPointer <= rightPointer) {
+    else if (mode === 'RIGHT_POINTER' && leftPointer <= rightPointer && !done) {
         rightPointer--;
     }
+    else if (!done) {
+        resetBattle();
+    }
+    else if (done) {
+        console.log(`DONE!`);
+    }
     else {
-        done = true;
+        console.log(`SHOULD NOT GET HERE!`);
     }
     updateVisuals();
 }
@@ -42,6 +52,20 @@ function swapLeftWithRight() {
     let leftValue = numberArray[leftPointer];
     numberArray[leftPointer] = numberArray[rightPointer];
     numberArray[rightPointer] = leftValue;
+}
+function resetBattle() {
+    const nextArray = tree.getNextNodeArray(numberArray, leftPointer, leftPointer + 1);
+    if (nextArray) {
+        numberArray = nextArray;
+        leftPointer = 0;
+        rightPointer = numberArray.length - 1;
+        pivot = numberArray[Math.floor((leftPointer + rightPointer) / 2)];
+        mode = 'LEFT_POINTER';
+    }
+    else {
+        numberArray = tree.getFinalArray();
+        done = true;
+    }
 }
 function updateLeftPointerIndexValue() {
     let element = document.getElementById('left-pointer-index');
