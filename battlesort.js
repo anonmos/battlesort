@@ -21,10 +21,15 @@ function pivotButtonClicked() {
             rightPointer--;
         }
         // Skip obviously equal comparisons
-        if (leftPointer === pivotPointerIndex) {
+        if (arrayOfThings[leftPointer] === pivot) {
             window.log(`Skipping duplicate!`);
             skips++;
             equalToClicked();
+            if (arrayOfThings[rightPointer] === pivot) {
+                window.log(`Skipping duplicate!`);
+                skips++;
+                equalToClicked();
+            }
         }
     }
     else if (leftPointer > rightPointer && !done) {
@@ -47,7 +52,7 @@ function comparisonButtonClicked() {
             rightPointer--;
         }
         // Skip obviously equal comparisons
-        if (rightPointer === pivotPointerIndex) {
+        if (arrayOfThings[rightPointer] === pivot) {
             window.log(`Skipping duplicate!`);
             skips++;
             equalToClicked();
@@ -110,12 +115,12 @@ function resetBattle() {
         pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)];
         pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2);
         mode = 'LEFT_POINTER';
-        // Handle pivot overlap with pointers
-        if (pivotPointerIndex === leftPointer) {
+        // Skip obviously equal comparisons
+        if (arrayOfThings[leftPointer] === pivot) {
             window.log(`Skipping duplicate!`);
             skips++;
             equalToClicked();
-            if (pivotPointerIndex === rightPointer) {
+            if (arrayOfThings[rightPointer] === pivot) {
                 window.log(`Skipping duplicate!`);
                 skips++;
                 equalToClicked();
