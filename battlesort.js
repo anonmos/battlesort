@@ -7,7 +7,7 @@ let rightPointer = arrayOfThings.length - 1;
 let pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)];
 let mode = 'LEFT_POINTER';
 let done = false;
-function lessThanClicked() {
+function pivotButtonClicked() {
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
             leftPointer++;
@@ -30,7 +30,7 @@ function lessThanClicked() {
     }
     updateVisuals();
 }
-function greaterThanClicked() {
+function comparisonButtonClicked() {
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER') {
             mode = 'RIGHT_POINTER';
@@ -121,13 +121,12 @@ function updatePivotValue() {
 function updateArrayValue() {
     updateElement('array-value', `${JSON.stringify(arrayOfThings)}`);
 }
-function updateTitle() {
+function updateChoices() {
     let currentPointer = mode === 'LEFT_POINTER' ? leftPointer : rightPointer;
-    let mainQuestionElement = document.getElementById('main-question');
-    let comparisonElement = document.createElement('strong');
-    mainQuestionElement.innerHTML = `Is ${arrayOfThings[currentPointer]} greater than `;
-    comparisonElement.innerHTML = `${pivot}?`;
-    mainQuestionElement.appendChild(comparisonElement);
+    const pivotButton = document.getElementById('pivot-button');
+    const comparisonButton = document.getElementById('comparison-button');
+    pivotButton.innerText = pivot.toString();
+    comparisonButton.innerText = arrayOfThings[currentPointer].toString();
 }
 function updateCurrentMode() {
     updateElement('current-mode', `Current Mode: ${mode}`);
@@ -154,7 +153,7 @@ function updateVisuals() {
     updateRightPointerValueValue();
     updatePivotValue();
     updateArrayValue();
-    updateTitle();
+    updateChoices();
     updateCurrentMode();
     updateIsDone();
 }

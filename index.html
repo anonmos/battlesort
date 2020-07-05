@@ -50,6 +50,12 @@
       cursor: pointer;
     }
 
+    button.comparison-button {
+      min-height: 70px;
+      font-size: 22px;
+      margin-top: 20px;
+    }
+
     .sort-stage {
       width: 100%;
       height: 100vh;
@@ -100,22 +106,24 @@
       <div class="displayables">
         <h1>BattleSort</h1>
         <p id="main-question" class="lead">Which of these items is <span style="font-weight: bold;"
-            id="comparison">true?</span></p>
+            id="comparison">greater?</span></p>
       </div>
       <div class="row">
         <div class="col">
-          <button id="less-than-button" onclick="lessThanClicked()">
-            No
+          <button class="comparison-button" id="comparison-button" onclick="comparisonButtonClicked()">
+            Comparison
           </button>
         </div>
+        <div class="col">
+          <button class="comparison-button" id="pivot-button" onclick="pivotButtonClicked()">
+            Pivot
+          </button>
+        </div>
+      </div>
+      <div class="row">
         <div class="col">
           <button id="equal-button" onclick="equalToClicked()">
             It's Equal
-          </button>
-        </div>
-        <div class="col">
-          <button id="greater-than-button" onclick="greaterThanClicked()">
-            Yes
           </button>
         </div>
       </div>
