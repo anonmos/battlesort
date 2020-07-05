@@ -48,12 +48,22 @@ function greaterThanClicked() {
     }
     updateVisuals();
 }
+function equalToClicked() {
+    if (mode === 'LEFT_POINTER') {
+        mode = 'RIGHT_POINTER';
+    }
+    else {
+        mode = 'LEFT_POINTER';
+    }
+    updateVisuals();
+}
 function swapLeftWithRight() {
     let leftValue = numberArray[leftPointer];
     numberArray[leftPointer] = numberArray[rightPointer];
     numberArray[rightPointer] = leftValue;
 }
 function resetBattle() {
+    console.log(`Storing array: ${JSON.stringify(numberArray)}`);
     const nextArray = tree.getNextNodeArray(numberArray, leftPointer, leftPointer + 1);
     if (nextArray) {
         numberArray = nextArray;
@@ -136,6 +146,9 @@ window.quicksort = function (arr, left = 0, right = arr.length - 1) {
     return arr;
 };
 window.partition = function (arr, left, right, pivot) {
+    const runLeft = left;
+    const runRight = right;
+    const runPivot = pivot;
     while (left <= right) {
         while (arr[left] < pivot && left <= right) { // Replace  `arr[left] < pivot`  with button click to select which is greater
             left++;
@@ -149,5 +162,8 @@ window.partition = function (arr, left, right, pivot) {
             right--;
         }
     }
+    window.partitionRun++;
+    console.log(`Run: ${window.partitionRun} - ${JSON.stringify(arr.slice(0, runRight + 1))}, left: ${runLeft}, right: ${runRight}, pivot: ${runPivot}`);
     return left;
 };
+window.partitionRun = 0;
