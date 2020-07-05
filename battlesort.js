@@ -5,8 +5,10 @@ const tree = new Tree(arrayOfThings);
 let leftPointer = 0;
 let rightPointer = arrayOfThings.length - 1;
 let pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)];
+let pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2);
 let mode = 'LEFT_POINTER';
 let done = false;
+let skips = 0;
 function pivotButtonClicked() {
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
@@ -17,6 +19,12 @@ function pivotButtonClicked() {
             mode = 'LEFT_POINTER';
             leftPointer++;
             rightPointer--;
+        }
+        // Skip obviously equal comparisons
+        if (leftPointer === pivotPointerIndex) {
+            window.log(`Skipping duplicate!`);
+            skips++;
+            equalToClicked();
         }
     }
     else if (leftPointer > rightPointer && !done) {
@@ -37,6 +45,12 @@ function comparisonButtonClicked() {
         }
         else {
             rightPointer--;
+        }
+        // Skip obviously equal comparisons
+        if (rightPointer === pivotPointerIndex) {
+            window.log(`Skipping duplicate!`);
+            skips++;
+            equalToClicked();
         }
     }
     else if (leftPointer > rightPointer && !done) {
@@ -85,6 +99,7 @@ function battleFinished(finalArray) {
     sortStage.style.display = 'none';
     const outputTextArea = document.getElementById('output');
     outputTextArea.value = finalArray.join(', ');
+    window.log(`Clicks saved: ${skips}`);
 }
 function resetBattle() {
     const nextArray = tree.getNextNodeArray(arrayOfThings, leftPointer, leftPointer + 1);
@@ -93,7 +108,19 @@ function resetBattle() {
         leftPointer = 0;
         rightPointer = arrayOfThings.length - 1;
         pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)];
+        pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2);
         mode = 'LEFT_POINTER';
+        // Handle pivot overlap with pointers
+        if (pivotPointerIndex === leftPointer) {
+            window.log(`Skipping duplicate!`);
+            skips++;
+            equalToClicked();
+            if (pivotPointerIndex === rightPointer) {
+                window.log(`Skipping duplicate!`);
+                skips++;
+                equalToClicked();
+            }
+        }
         setOriginalArray();
         updateVisuals();
         window.log(`Resetting with: ${JSON.stringify(arrayOfThings)}, leftPointer: ${leftPointer}, rightPointer: ${rightPointer}, pivotPointer: ${Math.floor((leftPointer + rightPointer) / 2)}, pivotValue: ${pivot}`);
@@ -115,7 +142,8 @@ function updateRightPointerIndexValue() {
 function updateRightPointerValueValue() {
     updateElement('right-pointer-value', `Right Pointer Value: ${arrayOfThings[rightPointer]}`);
 }
-function updatePivotValue() {
+function updatePivotValues() {
+    updateElement('pivot-pointer-index', `Pivot Pointer Index: ${pivotPointerIndex}`);
     updateElement('pivot-pointer-value', `Pivot Pointer Value: ${pivot}`);
 }
 function updateArrayValue() {
@@ -151,7 +179,7 @@ function updateVisuals() {
     updateRightPointerIndexValue();
     updateLeftPointerValueValue();
     updateRightPointerValueValue();
-    updatePivotValue();
+    updatePivotValues();
     updateArrayValue();
     updateChoices();
     updateCurrentMode();
@@ -168,6 +196,7 @@ function handleSortButtonClick() {
     sortContainer.style.display = 'flex';
     rightPointer = arrayOfThings.length - 1;
     pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)];
+    pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2);
     setOriginalArray();
     updateVisuals();
 }

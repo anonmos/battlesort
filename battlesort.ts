@@ -4,8 +4,10 @@ const tree = new Tree(arrayOfThings)
 let leftPointer = 0
 let rightPointer = arrayOfThings.length - 1
 let pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)]
+let pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2)
 let mode: 'LEFT_POINTER' | 'RIGHT_POINTER' = 'LEFT_POINTER'
 let done = false
+let skips = 0
 
 function pivotButtonClicked() {
     if (leftPointer <= rightPointer && !done) {
@@ -16,6 +18,13 @@ function pivotButtonClicked() {
             mode = 'LEFT_POINTER'
             leftPointer++
             rightPointer--
+        }
+
+        // Skip obviously equal comparisons
+        if (leftPointer === pivotPointerIndex) {
+            window.log(`Skipping duplicate!`)
+            skips++
+            equalToClicked()
         }
     } else if (leftPointer > rightPointer && !done) {
         resetBattle()
@@ -34,6 +43,13 @@ function comparisonButtonClicked() {
             mode = 'RIGHT_POINTER'
         } else {
             rightPointer--
+        }
+
+        // Skip obviously equal comparisons
+        if (rightPointer === pivotPointerIndex) {
+            window.log(`Skipping duplicate!`)
+            skips++
+            equalToClicked()
         }
     } else if (leftPointer > rightPointer && !done) {
         resetBattle()
@@ -81,6 +97,7 @@ function battleFinished(finalArray: Array<string | number>) {
     const outputTextArea: HTMLTextAreaElement = document.getElementById('output') as HTMLTextAreaElement
 
     outputTextArea.value = finalArray.join(', ')
+    window.log(`Clicks saved: ${skips}`)
 }
 
 function resetBattle() {
@@ -91,7 +108,21 @@ function resetBattle() {
         leftPointer = 0
         rightPointer = arrayOfThings.length - 1
         pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)]
+        pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2)
         mode = 'LEFT_POINTER'
+
+        // Handle pivot overlap with pointers
+        if (pivotPointerIndex === leftPointer) {
+            window.log(`Skipping duplicate!`)
+            skips++
+            equalToClicked()
+
+            if (pivotPointerIndex === rightPointer) {
+                window.log(`Skipping duplicate!`)
+                skips++
+                equalToClicked()
+            }
+        }
         setOriginalArray()
         updateVisuals()
         window.log(`Resetting with: ${JSON.stringify(arrayOfThings)}, leftPointer: ${leftPointer}, rightPointer: ${rightPointer}, pivotPointer: ${Math.floor((leftPointer + rightPointer) / 2)}, pivotValue: ${pivot}`)
@@ -117,7 +148,8 @@ function updateRightPointerValueValue() {
     updateElement('right-pointer-value', `Right Pointer Value: ${arrayOfThings[rightPointer]}`)
 }
 
-function updatePivotValue() {
+function updatePivotValues() {
+    updateElement('pivot-pointer-index', `Pivot Pointer Index: ${pivotPointerIndex}`)
     updateElement('pivot-pointer-value', `Pivot Pointer Value: ${pivot}`)
 }
 
@@ -160,7 +192,7 @@ function updateVisuals() {
     updateRightPointerIndexValue()
     updateLeftPointerValueValue()
     updateRightPointerValueValue()
-    updatePivotValue()
+    updatePivotValues()
     updateArrayValue()
     updateChoices()
     updateCurrentMode()
@@ -178,6 +210,7 @@ function handleSortButtonClick() {
     sortContainer!.style.display = 'flex'
     rightPointer = arrayOfThings.length - 1
     pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)]
+    pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2)
     setOriginalArray()
     updateVisuals()
 }
