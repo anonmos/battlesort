@@ -12,13 +12,9 @@ class Tree {
         this.currentNode.rightBeginIndex = rightBeginIndex;
         if (this.currentNode.solvedArr.length === 2) {
             console.log(`Finished block`);
-            // @ts-ignore
             this.currentNode.left = new TreeNode([this.currentNode.solvedArr[0]]);
-            // @ts-ignore
             console.log(`Setting finished left: ${JSON.stringify(this.currentNode.left.solvedArr)}`);
-            // @ts-ignore
             this.currentNode.right = new TreeNode([this.currentNode.solvedArr[1]]);
-            // @ts-ignore
             console.log(`Setting finished left: ${JSON.stringify(this.currentNode.right.solvedArr)}`);
         }
         else {
@@ -51,7 +47,7 @@ class Tree {
     gatherLeaves(node) {
         const currentNode = node ? node : this.rootNode;
         if (currentNode.isLeaf()) {
-            this.gatheredLeaves.push(currentNode.arr[0].toString());
+            this.gatheredLeaves.push(currentNode.arr[0]);
             return;
         }
         if (currentNode.left) {

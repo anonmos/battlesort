@@ -1,8 +1,8 @@
 class Tree {
     private currentNode: TreeNode
     private rootNode: TreeNode
-    private gatheredLeaves: string[] = []
-    constructor(arr: number[] | string[]) {
+    private gatheredLeaves: Array<string | number> = []
+    constructor(arr: Array<string | number>) {
         this.rootNode = new TreeNode(arr)
         this.currentNode = this.rootNode
     }
@@ -15,13 +15,9 @@ class Tree {
 
         if (this.currentNode.solvedArr.length === 2) {
             console.log(`Finished block`)
-            // @ts-ignore
             this.currentNode.left = new TreeNode([this.currentNode.solvedArr[0]])
-            // @ts-ignore
             console.log(`Setting finished left: ${JSON.stringify(this.currentNode.left.solvedArr)}`)
-            // @ts-ignore
             this.currentNode.right = new TreeNode([this.currentNode.solvedArr[1]])
-            // @ts-ignore
             console.log(`Setting finished left: ${JSON.stringify(this.currentNode.right.solvedArr)}`)
         } else {
             this.currentNode.left = new TreeNode(this.currentNode.solvedArr.slice(0, this.currentNode.leftEndIndex))
@@ -61,7 +57,7 @@ class Tree {
         const currentNode = node ? node : this.rootNode
 
         if (currentNode.isLeaf()) {
-            this.gatheredLeaves.push(currentNode.arr[0].toString())
+            this.gatheredLeaves.push(currentNode.arr[0])
             return
         }
 
@@ -74,7 +70,7 @@ class Tree {
         }
     }
 
-    public getFinalArray(): string[] {
+    public getFinalArray(): Array<string | number> {
         this.gatherLeaves(this.rootNode)
         return this.gatheredLeaves
     }
