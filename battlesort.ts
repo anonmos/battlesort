@@ -1,9 +1,9 @@
 // let numberArray = [9, 2, 5, 6, 4, 3, 7, 2, 10, 1, 1, 1, 10, 8];
-let numberArray = [1, 2, 5, 6, 4, 3, 7, 5, 10, 1, 1, 1, 10, 8];
-const tree = new Tree(numberArray)
+let arrayOfThings: Array<number | string> = []
+const tree = new Tree(arrayOfThings)
 let leftPointer = 0
-let rightPointer = numberArray.length - 1
-let pivot = numberArray[Math.floor((leftPointer + rightPointer) / 2)]
+let rightPointer = arrayOfThings.length - 1
+let pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)]
 let mode: 'LEFT_POINTER' | 'RIGHT_POINTER' = 'LEFT_POINTER'
 let done = false
 
@@ -21,9 +21,9 @@ function lessThanClicked() {
         resetBattle()
     }
     else if (done) {
-        console.log(`DONE!`)
+        window.log(`DONE!`)
     } else {
-        console.log(`SHOULD NOT GET HERE!`)
+        window.log(`SHOULD NOT GET HERE!`)
     }
     updateVisuals()
 }
@@ -38,9 +38,9 @@ function greaterThanClicked() {
     } else if (leftPointer > rightPointer && !done) {
         resetBattle()
     } else if (done) {
-        console.log(`DONE!`)
+        window.log(`DONE!`)
     } else {
-        console.log(`SHOULD NOT GET HERE!`)
+        window.log(`SHOULD NOT GET HERE!`)
     }
 
     updateVisuals()
@@ -59,66 +59,70 @@ function equalToClicked() {
     } else if (leftPointer > rightPointer && !done) {
         resetBattle()
     } else if (done) {
-        console.log(`DONE!`)
+        window.log(`DONE!`)
     } else {
-        console.log(`SHOULD NOT GET HERE!`)
+        window.log(`SHOULD NOT GET HERE!`)
     }
 
     updateVisuals()
 }
 
 function swapLeftWithRight() {
-    let leftValue = numberArray[leftPointer]
-    numberArray[leftPointer] = numberArray[rightPointer]
-    numberArray[rightPointer] = leftValue
+    let leftValue = arrayOfThings[leftPointer]
+    arrayOfThings[leftPointer] = arrayOfThings[rightPointer]
+    arrayOfThings[rightPointer] = leftValue
+}
+
+function battleFinished(finalArray: Array<string | number>) {
+    const answerStage = document.getElementById('answer-stage')
+    const sortStage = document.getElementById('sort-stage')
+    answerStage!.style.display = 'flex'
+    sortStage!.style.display = 'none'
+    const outputTextArea: HTMLTextAreaElement = document.getElementById('output') as HTMLTextAreaElement
+
+    outputTextArea.value = finalArray.join(', ')
 }
 
 function resetBattle() {
-    const nextArray = tree.getNextNodeArray(numberArray, leftPointer, leftPointer + 1)
+    const nextArray = tree.getNextNodeArray(arrayOfThings, leftPointer, leftPointer + 1)
 
     if (nextArray) {
-        numberArray = nextArray as number[]
+        arrayOfThings = nextArray as number[]
         leftPointer = 0
-        rightPointer = numberArray.length - 1
-        pivot = numberArray[Math.floor((leftPointer + rightPointer) / 2)]
+        rightPointer = arrayOfThings.length - 1
+        pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)]
         mode = 'LEFT_POINTER'
         setOriginalArray()
         updateVisuals()
-        console.log(`Resetting with: ${JSON.stringify(numberArray)}, leftPointer: ${leftPointer}, rightPointer: ${rightPointer}, pivotPointer: ${Math.floor((leftPointer + rightPointer) / 2)}, pivotValue: ${pivot}`)
+        window.log(`Resetting with: ${JSON.stringify(arrayOfThings)}, leftPointer: ${leftPointer}, rightPointer: ${rightPointer}, pivotPointer: ${Math.floor((leftPointer + rightPointer) / 2)}, pivotValue: ${pivot}`)
     } else {
-        numberArray = tree.getFinalArray() as unknown as number[]
+        battleFinished(tree.getFinalArray())
         done = true
     }
 }
 
 function updateLeftPointerIndexValue() {
-    let element = document.getElementById('left-pointer-index')
-    element!.innerHTML = `Left Pointer Index: ${leftPointer}`
+    updateElement('left-pointer-index', `Left Pointer Index: ${leftPointer}`)
 }
 
 function updateLeftPointerValueValue() {
-    let element = document.getElementById('left-pointer-value')
-    element!.innerHTML = `Left Pointer Value: ${numberArray[leftPointer]}`
+    updateElement('left-pointer-value', `Left Pointer Value: ${arrayOfThings[leftPointer]}`)
 }
 
 function updateRightPointerIndexValue() {
-    let element = document.getElementById('right-pointer-index')
-    element!.innerHTML = `Right Pointer Index: ${rightPointer}`
+    updateElement('right-pointer-index', `Right Pointer Index: ${rightPointer}`)
 }
 
 function updateRightPointerValueValue() {
-    let element = document.getElementById('right-pointer-value')
-    element!.innerHTML = `Right Pointer Value: ${numberArray[rightPointer]}`
+    updateElement('right-pointer-value', `Right Pointer Value: ${arrayOfThings[rightPointer]}`)
 }
 
 function updatePivotValue() {
-    let element = document.getElementById('pivot-pointer-value')
-    element!.innerHTML = `Pivot Pointer Value: ${pivot}`
+    updateElement('pivot-pointer-value', `Pivot Pointer Value: ${pivot}`)
 }
 
 function updateArrayValue() {
-    let element = document.getElementById('array-value')
-    element!.innerHTML = `${JSON.stringify(numberArray)}`
+    updateElement('array-value', `${JSON.stringify(arrayOfThings)}`)
 }
 
 function updateTitle() {
@@ -126,24 +130,30 @@ function updateTitle() {
     let mainQuestionElement = document.getElementById('main-question')
     let comparisonElement = document.createElement('strong')
 
-    mainQuestionElement!.innerHTML = `Is ${numberArray[currentPointer]} greater than `
-    comparisonElement.innerHTML = `${pivot}`
+    mainQuestionElement!.innerHTML = `Is ${arrayOfThings[currentPointer]} greater than `
+    comparisonElement.innerHTML = `${pivot}?`
     mainQuestionElement!.appendChild(comparisonElement)
 }
 
 function updateCurrentMode() {
-    let element = document.getElementById('current-mode')
-    element!.innerHTML = `Current Mode: ${mode}`
+    updateElement('current-mode', `Current Mode: ${mode}`)
 }
 
 function updateIsDone() {
-    let element = document.getElementById('is-done')
-    element!.innerHTML = `Done: ${done}`
+    updateElement('is-done', `Done: ${done}`)
 }
 
 function setOriginalArray() {
-    let element = document.getElementById('original-array')
-    element!.innerHTML = `${JSON.stringify(numberArray)} <-- Original`
+    updateElement('original-array', `${JSON.stringify(arrayOfThings)} <-- Original`)
+}
+
+function updateElement(id: string, value: string) {
+    try {
+        let element = document.getElementById(id)
+        element!.innerHTML = value
+    } catch (e) {
+        // element is probably off, swallow the error
+    }
 }
 
 function updateVisuals() {
@@ -158,16 +168,31 @@ function updateVisuals() {
     updateIsDone()
 }
 
-window.onload = function () {
+function handleSortButtonClick() {
+    const sortInput: HTMLTextAreaElement = document.getElementById('input') as HTMLTextAreaElement
+    const inputContainer = document.getElementById('input-stage')
+    const sortContainer = document.getElementById('sort-stage')
+    const inputValues = sortInput.value
+    const parsedArray = inputValues.split(',').map((value) => value.trim())
+    arrayOfThings = parsedArray
+    inputContainer!.style.display = 'none'
+    sortContainer!.style.display = 'flex'
+    rightPointer = arrayOfThings.length - 1
+    pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)]
     setOriginalArray()
     updateVisuals()
+}
+
+window.onload = function () {
+    const sortInput: HTMLTextAreaElement = document.getElementById('input') as HTMLTextAreaElement
+    sortInput.value = "1, 2, 5, 6, 4, 3, 7, 5, 10, 1, 1, 1, 10, 8"
 }
 
 window.quicksort = function (arr: number[], left = 0, right = arr.length - 1) {
     if (left >= right) return;
     const pivot = arr[Math.floor((left + right) / 2)];
     const index = window.partition(arr, left, right, pivot);
-    // console.log(`Run ${window.partitionRun} index: ${index}`)
+    // window.log(`Run ${window.partitionRun} index: ${index}`)
     window.quicksort(arr, left, index - 1);
     window.quicksort(arr, index, right);
     return arr;
@@ -178,7 +203,7 @@ window.partition = function (arr: number[], left: number, right: number, pivot: 
     const runLeft = left
     const runRight = right
     const runPivot = pivot
-    console.log(`Begin Run: ${window.partitionRun} - ${JSON.stringify(arr.slice(runLeft, runRight + 1))}, left: ${runLeft}, right: ${runRight}, pivot: ${runPivot}`)
+    window.log(`Begin Run: ${window.partitionRun} - ${JSON.stringify(arr.slice(runLeft, runRight + 1))}, left: ${runLeft}, right: ${runRight}, pivot: ${runPivot}`)
 
     while (left <= right) {
         while (arr[left] < pivot && left <= right) { // Replace  `arr[left] < pivot`  with button click to select which is greater
@@ -194,9 +219,31 @@ window.partition = function (arr: number[], left: number, right: number, pivot: 
         }
     }
 
-    console.log(`End Run: ${window.partitionRun} - ${JSON.stringify(arr.slice(runLeft, runRight + 1))}, left: ${runLeft}, right: ${runRight}, pivot: ${runPivot}`)
+    window.log(`End Run: ${window.partitionRun} - ${JSON.stringify(arr.slice(runLeft, runRight + 1))}, left: ${runLeft}, right: ${runRight}, pivot: ${runPivot}`)
 
     return left;
 }
 
 window.partitionRun = 0
+window.debugEnabled = false
+
+window.enableDebug = function() {
+    const debugRowOne = document.getElementById('debug-row')
+
+    debugRowOne!.style.display = 'block'
+    window.debugEnabled = true
+    updateVisuals()
+}
+
+window.disableDebug = function() {
+    const debugRowOne = document.getElementById('debug-row')
+
+    debugRowOne!.style.display = 'none'
+    window.debugEnabled = false
+}
+
+window.log = function(content: string) {
+    if (window.debugEnabled) {
+        console.log(content)
+    }
+}

@@ -7,23 +7,23 @@ class Tree {
         this.currentNode = this.rootNode
     }
 
-    public getNextNodeArray(solvedArr: string[] | number[], leftEndIndex: number, rightBeginIndex: number) {
+    public getNextNodeArray(solvedArr: Array<string | number>, leftEndIndex: number, rightBeginIndex: number) {
         this.currentNode.solvedArr = solvedArr
-        console.log(`Setting solved array: ${JSON.stringify(solvedArr)}`)
+        window.log(`Setting solved array: ${JSON.stringify(solvedArr)}`)
         this.currentNode.leftEndIndex = leftEndIndex
         this.currentNode.rightBeginIndex = rightBeginIndex
 
         if (this.currentNode.solvedArr.length === 2) {
-            console.log(`Finished block`)
+            window.log(`Finished block`)
             this.currentNode.left = new TreeNode([this.currentNode.solvedArr[0]])
-            console.log(`Setting finished left: ${JSON.stringify(this.currentNode.left.solvedArr)}`)
+            window.log(`Setting finished left: ${JSON.stringify(this.currentNode.left.solvedArr)}`)
             this.currentNode.right = new TreeNode([this.currentNode.solvedArr[1]])
-            console.log(`Setting finished left: ${JSON.stringify(this.currentNode.right.solvedArr)}`)
+            window.log(`Setting finished left: ${JSON.stringify(this.currentNode.right.solvedArr)}`)
         } else {
             this.currentNode.left = new TreeNode(this.currentNode.solvedArr.slice(0, this.currentNode.leftEndIndex))
             this.currentNode.right = new TreeNode(this.currentNode.solvedArr.slice(this.currentNode.rightBeginIndex - 1, this.currentNode.solvedArr.length))
-            console.log(`Setting left: ${JSON.stringify(this.currentNode.left.arr)}`)
-            console.log(`Setting right: ${JSON.stringify(this.currentNode.right.arr)}`)
+            window.log(`Setting left: ${JSON.stringify(this.currentNode.left.arr)}`)
+            window.log(`Setting right: ${JSON.stringify(this.currentNode.right.arr)}`)
         }
 
         const potentialNextNode = this.findNextNode()

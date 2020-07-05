@@ -14,79 +14,123 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
 
   <title>BattleSort</title>
+  <style>
+    .input-stage {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .input-container {
+      text-align: center;
+    }
+
+    .input-container > .subtext {
+      margin-bottom: 30px;
+    }
+
+    textarea.text-input {
+      min-width: 500px;
+      min-height: 300px;
+    }
+
+    .inputs {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button {
+      width: 150px;
+      height: 30px;
+      margin-top: 30px;
+    }
+
+    .sort-stage {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .displayables {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .answer-stage {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <a class="navbar-brand" href="#">BattleSort</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
+  <div class="body">
+    <div id="input-stage" class="input-stage">
+      <div class="input-container">
+        <h1>Welcome to BattleSort!</h1>
+        <div class="subtext">Type in a list of items, separated by commas, then click the "Sort!" button.</div>
+        <div class="inputs">
+          <textarea id="input" class="text-input"></textarea>
+          <button id="sort" class="sort-button" onclick="handleSortButtonClick()">Sort!</button>
+        </div>
+      </div>
     </div>
-  </nav>
-
-  <main role="main" class="container">
-    <div class="jumbotron">
-      <h1>BattleSort</h1>
-      <p id="main-question" class="lead">Which of these items is <span style="font-weight: bold;" id="comparison">true?</span></p>
+    <div id="sort-stage" class="sort-stage" style="display: none;">
+      <div class="displayables">
+        <h1>BattleSort</h1>
+        <p id="main-question" class="lead">Which of these items is <span style="font-weight: bold;"
+            id="comparison">true?</span></p>
+      </div>
       <div class="row">
         <div class="col">
           <button id="less-than-button" onclick="lessThanClicked()">
-            False
+            No
           </button>
         </div>
         <div class="col">
           <button id="equal-button" onclick="equalToClicked()">
-            Equal
+            It's Equal
           </button>
         </div>
         <div class="col">
           <button id="greater-than-button" onclick="greaterThanClicked()">
-            True
+            Yes
           </button>
         </div>
       </div>
-      <div class="row">
+      <div id="debug-row" class="row" style="display: none;">
         <div class="col" id="left-pointer-index">Left Pointer Index</div>
         <div class="col" id="right-pointer-index">Left Pointer Index</div>
         <div class="col" id="left-pointer-value">Left Pointer Value</div>
         <div class="col" id="right-pointer-value">Right Pointer Value</div>
         <div class="col" id="pivot-pointer-value">Pivot Value</div>
-      </div>
-      <div class="row">
-        <div class="col" id="array-value">Array Value</div>
         <div class="col" id="current-mode"></div>
         <div class="col" id="is-done"></div>
-      </div>
-      <div class="row">
+        <div class="col" id="array-value">Array Value</div>
         <div class="col" id="original-array"></div>
       </div>
-  </main>
-
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-    crossorigin="anonymous"></script>
+    </div>
+    <div id="answer-stage" class="answer-stage" style="display: none;">
+      <div class="input-container">
+        <h1>BattleSort Complete!</h1>
+        <div class="subtext">Here are your sorted things.</div>
+        <div class="inputs">
+          <textarea id="output" class="text-input"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="./tree-node.js"></script>
   <script src="./tree.js"></script>
   <script src="./battlesort.js"></script>
