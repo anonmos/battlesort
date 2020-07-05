@@ -5,31 +5,38 @@ class Tree {
         this.rootNode = new TreeNode(arr);
         this.currentNode = this.rootNode;
     }
-    getNextNodeArray(arr, leftEndIndex, rightBeginIndex) {
-        this.currentNode.arr = arr;
+    getNextNodeArray(solvedArr, leftEndIndex, rightBeginIndex) {
+        this.currentNode.solvedArr = solvedArr;
+        console.log(`Setting solved array: ${JSON.stringify(solvedArr)}`);
         this.currentNode.leftEndIndex = leftEndIndex;
         this.currentNode.rightBeginIndex = rightBeginIndex;
-        if (this.currentNode.isLeaf()) {
-            const potentialNextNode = this.findNextNode(this.currentNode);
-            if (!potentialNextNode) {
-                return potentialNextNode;
-            }
-            this.currentNode = potentialNextNode;
+        if (this.currentNode.solvedArr.length === 2) {
+            console.log(`Finished block`);
+            // @ts-ignore
+            this.currentNode.left = new TreeNode([this.currentNode.solvedArr[0]]);
+            // @ts-ignore
+            console.log(`Setting finished left: ${JSON.stringify(this.currentNode.left.solvedArr)}`);
+            // @ts-ignore
+            this.currentNode.right = new TreeNode([this.currentNode.solvedArr[1]]);
+            // @ts-ignore
+            console.log(`Setting finished left: ${JSON.stringify(this.currentNode.right.solvedArr)}`);
         }
-        if (!this.currentNode.left) {
-            this.currentNode.left = new TreeNode(this.currentNode.arr.slice(0, this.currentNode.leftEndIndex));
-            this.currentNode.left.parent = this.currentNode;
-            return this.currentNode.left.arr;
+        else {
+            this.currentNode.left = new TreeNode(this.currentNode.solvedArr.slice(0, this.currentNode.leftEndIndex));
+            this.currentNode.right = new TreeNode(this.currentNode.solvedArr.slice(this.currentNode.rightBeginIndex - 1, this.currentNode.solvedArr.length));
+            console.log(`Setting left: ${JSON.stringify(this.currentNode.left.arr)}`);
+            console.log(`Setting right: ${JSON.stringify(this.currentNode.right.arr)}`);
         }
-        else if (!this.currentNode.right) {
-            this.currentNode.right = new TreeNode(this.currentNode.arr.slice(this.currentNode.rightBeginIndex, this.currentNode.arr.length - 1));
-            this.currentNode.right.parent = this.currentNode;
-            return this.currentNode.right.arr;
+        const potentialNextNode = this.findNextNode();
+        if (!potentialNextNode) {
+            return potentialNextNode;
         }
+        this.currentNode = potentialNextNode;
+        return this.currentNode.arr;
     }
     findNextNode(node) {
         const currentNode = node ? node : this.rootNode;
-        if ((!currentNode.left || !currentNode.right) && !currentNode.isLeaf()) {
+        if ((!currentNode.solvedArr) && !currentNode.isLeaf()) {
             return currentNode;
         }
         else if (currentNode.isLeaf()) {

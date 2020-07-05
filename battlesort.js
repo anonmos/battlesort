@@ -8,19 +8,19 @@ let pivot = numberArray[Math.floor((leftPointer + rightPointer) / 2)];
 let mode = 'LEFT_POINTER';
 let done = false;
 function lessThanClicked() {
-    if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer && !done) {
-        leftPointer++;
-    }
-    else if (mode === 'RIGHT_POINTER' && leftPointer <= rightPointer && !done) {
-        if (leftPointer <= rightPointer) {
+    if (leftPointer <= rightPointer && !done) {
+        if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
+            leftPointer++;
+        }
+        else if (mode === 'RIGHT_POINTER') {
             swapLeftWithRight();
             mode = 'LEFT_POINTER';
             leftPointer++;
             rightPointer--;
         }
-        else {
-            resetBattle();
-        }
+    }
+    else if (leftPointer > rightPointer && !done) {
+        resetBattle();
     }
     else if (done) {
         console.log(`DONE!`);
@@ -31,13 +31,15 @@ function lessThanClicked() {
     updateVisuals();
 }
 function greaterThanClicked() {
-    if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer && !done) {
-        mode = 'RIGHT_POINTER';
+    if (leftPointer <= rightPointer && !done) {
+        if (mode === 'LEFT_POINTER') {
+            mode = 'RIGHT_POINTER';
+        }
+        else {
+            rightPointer--;
+        }
     }
-    else if (mode === 'RIGHT_POINTER' && leftPointer <= rightPointer && !done) {
-        rightPointer--;
-    }
-    else if (!done) {
+    else if (leftPointer > rightPointer && !done) {
         resetBattle();
     }
     else if (done) {
@@ -49,11 +51,25 @@ function greaterThanClicked() {
     updateVisuals();
 }
 function equalToClicked() {
-    if (mode === 'LEFT_POINTER') {
-        mode = 'RIGHT_POINTER';
+    if (leftPointer <= rightPointer && !done) {
+        if (mode === 'LEFT_POINTER') {
+            mode = 'RIGHT_POINTER';
+        }
+        else if (mode === 'RIGHT_POINTER') {
+            swapLeftWithRight();
+            mode = 'LEFT_POINTER';
+            leftPointer++;
+            rightPointer--;
+        }
+    }
+    else if (leftPointer > rightPointer && !done) {
+        resetBattle();
+    }
+    else if (done) {
+        console.log(`DONE!`);
     }
     else {
-        mode = 'LEFT_POINTER';
+        console.log(`SHOULD NOT GET HERE!`);
     }
     updateVisuals();
 }
@@ -63,7 +79,6 @@ function swapLeftWithRight() {
     numberArray[rightPointer] = leftValue;
 }
 function resetBattle() {
-    console.log(`Storing array: ${JSON.stringify(numberArray)}`);
     const nextArray = tree.getNextNodeArray(numberArray, leftPointer, leftPointer + 1);
     if (nextArray) {
         numberArray = nextArray;
@@ -71,6 +86,9 @@ function resetBattle() {
         rightPointer = numberArray.length - 1;
         pivot = numberArray[Math.floor((leftPointer + rightPointer) / 2)];
         mode = 'LEFT_POINTER';
+        setOriginalArray();
+        updateVisuals();
+        console.log(`Resetting with: ${JSON.stringify(numberArray)}, leftPointer: ${leftPointer}, rightPointer: ${rightPointer}, pivotPointer: ${Math.floor((leftPointer + rightPointer) / 2)}, pivotValue: ${pivot}`);
     }
     else {
         numberArray = tree.getFinalArray();
@@ -95,7 +113,7 @@ function updateRightPointerValueValue() {
 }
 function updatePivotValue() {
     let element = document.getElementById('pivot-pointer-value');
-    element.innerHTML = `Pivot Pointer Value: ${numberArray[pivot]}`;
+    element.innerHTML = `Pivot Pointer Value: ${pivot}`;
 }
 function updateArrayValue() {
     let element = document.getElementById('array-value');
@@ -106,7 +124,7 @@ function updateTitle() {
     let mainQuestionElement = document.getElementById('main-question');
     let comparisonElement = document.createElement('strong');
     mainQuestionElement.innerHTML = `Is ${numberArray[currentPointer]} greater than `;
-    comparisonElement.innerHTML = `${numberArray[pivot]}`;
+    comparisonElement.innerHTML = `${pivot}`;
     mainQuestionElement.appendChild(comparisonElement);
 }
 function updateCurrentMode() {
@@ -141,14 +159,17 @@ window.quicksort = function (arr, left = 0, right = arr.length - 1) {
         return;
     const pivot = arr[Math.floor((left + right) / 2)];
     const index = window.partition(arr, left, right, pivot);
+    // console.log(`Run ${window.partitionRun} index: ${index}`)
     window.quicksort(arr, left, index - 1);
     window.quicksort(arr, index, right);
     return arr;
 };
 window.partition = function (arr, left, right, pivot) {
+    window.partitionRun++;
     const runLeft = left;
     const runRight = right;
     const runPivot = pivot;
+    console.log(`Begin Run: ${window.partitionRun} - ${JSON.stringify(arr.slice(runLeft, runRight + 1))}, left: ${runLeft}, right: ${runRight}, pivot: ${runPivot}`);
     while (left <= right) {
         while (arr[left] < pivot && left <= right) { // Replace  `arr[left] < pivot`  with button click to select which is greater
             left++;
@@ -162,8 +183,7 @@ window.partition = function (arr, left, right, pivot) {
             right--;
         }
     }
-    window.partitionRun++;
-    console.log(`Run: ${window.partitionRun} - ${JSON.stringify(arr.slice(0, runRight + 1))}, left: ${runLeft}, right: ${runRight}, pivot: ${runPivot}`);
+    console.log(`End Run: ${window.partitionRun} - ${JSON.stringify(arr.slice(runLeft, runRight + 1))}, left: ${runLeft}, right: ${runRight}, pivot: ${runPivot}`);
     return left;
 };
 window.partitionRun = 0;

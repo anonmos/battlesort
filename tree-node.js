@@ -22,5 +22,8 @@ class TreeNode {
         this.isLeaf = () => {
             return !this.left && !this.right && this.arr.length === 1;
         };
+        if (arr.length === 1) {
+            this.solvedArr = arr;
+        }
     }
 }

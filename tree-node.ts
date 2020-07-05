@@ -4,7 +4,12 @@ class TreeNode {
     public right?: TreeNode
     public leftEndIndex?: number
     public rightBeginIndex?: number
-    constructor(public arr: string[] | number[]) {}
+    public solvedArr?: string[] | number[]
+    constructor(public arr: string[] | number[]) {
+        if (arr.length === 1) {
+            this.solvedArr = arr
+        }
+    }
 
     public setLeftChild = (node: TreeNode) => {
         this.left = node
