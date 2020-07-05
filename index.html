@@ -5,16 +5,13 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"> 
 
   <title>BattleSort</title>
   <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
     .input-stage {
       width: 100%;
       height: 100vh;
@@ -34,6 +31,7 @@
     textarea.text-input {
       min-width: 500px;
       min-height: 300px;
+      font-family: 'Roboto', sans-serif;
     }
 
     .inputs {
@@ -47,6 +45,9 @@
       width: 150px;
       height: 30px;
       margin-top: 30px;
+      font-size: 15px;
+      font-family: 'Roboto', sans-serif;
+      cursor: pointer;
     }
 
     .sort-stage {
@@ -70,6 +71,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .col {
+      margin: 0 30px;
     }
   </style>
 </head>
