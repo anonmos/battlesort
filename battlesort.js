@@ -195,7 +195,11 @@ function handleSortButtonClick() {
     const inputContainer = document.getElementById('input-stage');
     const sortContainer = document.getElementById('sort-stage');
     const inputValues = sortInput.value;
-    const parsedArray = inputValues.split(',').map((value) => value.trim());
+    let parsedArray = inputValues.split(',');
+    if (parsedArray.length === 1) {
+        parsedArray = inputValues.split('\n');
+    }
+    parsedArray = parsedArray.map((item) => item.trim());
     arrayOfThings = parsedArray;
     inputContainer.style.display = 'none';
     sortContainer.style.display = 'flex';
@@ -253,6 +257,9 @@ window.disableDebug = function () {
     const debugRowOne = document.getElementById('debug-row');
     debugRowOne.style.display = 'none';
     window.debugEnabled = false;
+};
+window.triggerBattleFinished = function () {
+    battleFinished(arrayOfThings);
 };
 window.log = function (content) {
     if (window.debugEnabled) {

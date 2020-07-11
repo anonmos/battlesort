@@ -6,4 +6,5 @@ interface Window {
     debugEnabled: boolean
     disableDebug: () => void
     log: (logContent: string) => void
+    triggerBattleFinished: () => void
 }
