@@ -209,6 +209,26 @@ function handleSortButtonClick() {
     setOriginalArray();
     updateVisuals();
 }
+function reverseFinalOrder() {
+    let MODE = ', ';
+    const outputTextArea = document.getElementById('output');
+    let finalValuesArray = outputTextArea.value.split(',').map((item) => item.trim());
+    if (finalValuesArray.length === 1) {
+        finalValuesArray = outputTextArea.value.split('\n').map((item) => item.trim());
+        MODE = '\n';
+    }
+    outputTextArea.value = finalValuesArray.reverse().map((item) => item.trim()).join(MODE).trim();
+}
+function swapDelineator() {
+    let MODE = ',';
+    const outputTextArea = document.getElementById('output');
+    let finalValuesArray = outputTextArea.value.split(',');
+    if (finalValuesArray.length === 1) {
+        finalValuesArray = outputTextArea.value.split('\n').map((item) => item.trim());
+        MODE = '\n';
+    }
+    outputTextArea.value = MODE === ',' ? finalValuesArray.map((item) => item.trim()).join('\n').trim() : finalValuesArray.map((item) => item.trim()).join(', ').trim();
+}
 window.onload = function () {
     const sortInput = document.getElementById('input');
     sortInput.value = "1, 2, 5, 6, 4, 3, 7, 5, 10, 1, 1, 1, 10, 8";

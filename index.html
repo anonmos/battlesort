@@ -78,6 +78,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+    }
+
+    .button-row {
+      width: 400px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
     }
 
     .row {
@@ -148,6 +156,10 @@
         <div class="inputs">
           <textarea id="output" class="text-input"></textarea>
         </div>
+      </div>
+      <div class="button-row">
+        <button onclick="reverseFinalOrder()">Reverse Order</button>
+        <button onclick="swapDelineator()">Swap Delineator</button>
       </div>
     </div>
   </div>
