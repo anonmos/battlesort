@@ -9,7 +9,15 @@ let pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2);
 let mode = 'LEFT_POINTER';
 let done = false;
 let skips = 0;
-function pivotButtonClicked() {
+var COMPARISONS;
+(function (COMPARISONS) {
+    COMPARISONS["PIVOT_GREATER"] = "PIVOT_GT";
+    COMPARISONS["COMPARISON_GREATER"] = "COMPARISON_GT";
+    COMPARISONS["EQUAL"] = "EQ";
+})(COMPARISONS || (COMPARISONS = {}));
+const autoSortTracker = {};
+function pivotButtonClicked(autoSortActive = false) {
+    trackComparison(COMPARISONS.PIVOT_GREATER);
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
             leftPointer++;
@@ -41,9 +49,16 @@ function pivotButtonClicked() {
     else {
         window.log(`SHOULD NOT GET HERE!`);
     }
+    if (!autoSortActive) {
+        let shouldContinueAutoSorting = autoSort();
+        while (shouldContinueAutoSorting && !done) {
+            shouldContinueAutoSorting = autoSort();
+        }
+    }
     updateVisuals();
 }
-function comparisonButtonClicked() {
+function comparisonButtonClicked(autoSortActive = false) {
+    trackComparison(COMPARISONS.COMPARISON_GREATER);
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER') {
             mode = 'RIGHT_POINTER';
@@ -67,9 +82,16 @@ function comparisonButtonClicked() {
     else {
         window.log(`SHOULD NOT GET HERE!`);
     }
+    if (!autoSortActive) {
+        let shouldContinueAutoSorting = autoSort();
+        while (shouldContinueAutoSorting && !done) {
+            shouldContinueAutoSorting = autoSort();
+        }
+    }
     updateVisuals();
 }
-function equalToClicked() {
+function equalToClicked(autoSortActive = false) {
+    trackComparison(COMPARISONS.EQUAL);
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER') {
             mode = 'RIGHT_POINTER';
@@ -90,12 +112,70 @@ function equalToClicked() {
     else {
         window.log(`SHOULD NOT GET HERE!`);
     }
+    if (!autoSortActive) {
+        let shouldContinueAutoSorting = autoSort();
+        while (shouldContinueAutoSorting && !done) {
+            shouldContinueAutoSorting = autoSort();
+        }
+    }
     updateVisuals();
+}
+function trackComparison(comparison) {
+    const pointer = mode === "LEFT_POINTER" ? leftPointer : rightPointer;
+    const pointerValue = arrayOfThings[pointer].toString();
+    const stringPivot = pivot.toString();
+    if (!autoSortTracker[stringPivot]) {
+        autoSortTracker[stringPivot] = {};
+    }
+    if (!autoSortTracker[stringPivot][pointerValue]) {
+        autoSortTracker[stringPivot][pointerValue] = comparison;
+    }
+    if (!autoSortTracker[pointerValue]) {
+        autoSortTracker[pointerValue] = {};
+    }
+    if (!autoSortTracker[pointerValue][stringPivot]) {
+        autoSortTracker[pointerValue][stringPivot] = getReverseComparison(comparison);
+    }
 }
 function swapLeftWithRight() {
     let leftValue = arrayOfThings[leftPointer];
     arrayOfThings[leftPointer] = arrayOfThings[rightPointer];
     arrayOfThings[rightPointer] = leftValue;
+}
+function autoSort() {
+    const pointer = mode === "LEFT_POINTER" ? leftPointer : rightPointer;
+    const pointerValue = arrayOfThings[pointer].toString();
+    const stringPivot = pivot.toString();
+    let sortAction = undefined;
+    if (autoSortTracker[stringPivot] && autoSortTracker[stringPivot][pointerValue]) {
+        sortAction = autoSortTracker[stringPivot][pointerValue];
+    }
+    if (!sortAction && autoSortTracker[pointerValue] && autoSortTracker[pointerValue][stringPivot]) {
+        sortAction = getReverseComparison(autoSortTracker[pointerValue][stringPivot]);
+    }
+    if (sortAction === COMPARISONS.PIVOT_GREATER) {
+        pivotButtonClicked(true);
+        skips++;
+    }
+    else if (sortAction === COMPARISONS.COMPARISON_GREATER) {
+        comparisonButtonClicked(true);
+        skips++;
+    }
+    else if (sortAction === COMPARISONS.EQUAL) {
+        equalToClicked(true);
+        skips++;
+    }
+    return sortAction !== undefined;
+}
+function getReverseComparison(comparison) {
+    let rval = COMPARISONS.EQUAL;
+    if (comparison === COMPARISONS.PIVOT_GREATER) {
+        rval = COMPARISONS.COMPARISON_GREATER;
+    }
+    else if (comparison === COMPARISONS.COMPARISON_GREATER) {
+        rval = COMPARISONS.PIVOT_GREATER;
+    }
+    return rval;
 }
 function battleFinished(finalArray) {
     const answerStage = document.getElementById('answer-stage');
