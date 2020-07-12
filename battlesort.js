@@ -1,7 +1,13 @@
 "use strict";
-// let numberArray = [9, 2, 5, 6, 4, 3, 7, 2, 10, 1, 1, 1, 10, 8];
+var COMPARISONS;
+(function (COMPARISONS) {
+    COMPARISONS["PIVOT_GREATER"] = "PIVOT_GT";
+    COMPARISONS["COMPARISON_GREATER"] = "COMPARISON_GT";
+    COMPARISONS["EQUAL"] = "EQ";
+})(COMPARISONS || (COMPARISONS = {}));
 let arrayOfThings = [];
-const tree = new Tree(arrayOfThings);
+let originalArrayOfThings = [];
+let tree = new Tree(arrayOfThings);
 let leftPointer = 0;
 let rightPointer = arrayOfThings.length - 1;
 let pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)];
@@ -9,15 +15,10 @@ let pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2);
 let mode = 'LEFT_POINTER';
 let done = false;
 let skips = 0;
-var COMPARISONS;
-(function (COMPARISONS) {
-    COMPARISONS["PIVOT_GREATER"] = "PIVOT_GT";
-    COMPARISONS["COMPARISON_GREATER"] = "COMPARISON_GT";
-    COMPARISONS["EQUAL"] = "EQ";
-})(COMPARISONS || (COMPARISONS = {}));
-const autoSortTracker = {};
+let autoSortTracker = {};
+let actionTracker = [];
 function pivotButtonClicked(autoSortActive = false) {
-    trackComparison(COMPARISONS.PIVOT_GREATER);
+    trackComparison(COMPARISONS.PIVOT_GREATER, !autoSortActive);
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER' && leftPointer <= rightPointer) {
             leftPointer++;
@@ -32,11 +33,11 @@ function pivotButtonClicked(autoSortActive = false) {
         if (arrayOfThings[leftPointer] === pivot) {
             window.log(`Skipping duplicate!`);
             skips++;
-            equalToClicked();
+            equalToClicked(false, true);
             if (arrayOfThings[rightPointer] === pivot) {
                 window.log(`Skipping duplicate!`);
                 skips++;
-                equalToClicked();
+                equalToClicked(false, true);
             }
         }
     }
@@ -58,7 +59,7 @@ function pivotButtonClicked(autoSortActive = false) {
     updateVisuals();
 }
 function comparisonButtonClicked(autoSortActive = false) {
-    trackComparison(COMPARISONS.COMPARISON_GREATER);
+    trackComparison(COMPARISONS.COMPARISON_GREATER, !autoSortActive);
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER') {
             mode = 'RIGHT_POINTER';
@@ -70,7 +71,7 @@ function comparisonButtonClicked(autoSortActive = false) {
         if (arrayOfThings[rightPointer] === pivot) {
             window.log(`Skipping duplicate!`);
             skips++;
-            equalToClicked();
+            equalToClicked(false, true);
         }
     }
     else if (leftPointer > rightPointer && !done) {
@@ -90,8 +91,8 @@ function comparisonButtonClicked(autoSortActive = false) {
     }
     updateVisuals();
 }
-function equalToClicked(autoSortActive = false) {
-    trackComparison(COMPARISONS.EQUAL);
+function equalToClicked(autoSortActive = false, autoEqualsClicked = false) {
+    trackComparison(COMPARISONS.EQUAL, !autoSortActive && !autoEqualsClicked);
     if (leftPointer <= rightPointer && !done) {
         if (mode === 'LEFT_POINTER') {
             mode = 'RIGHT_POINTER';
@@ -120,7 +121,7 @@ function equalToClicked(autoSortActive = false) {
     }
     updateVisuals();
 }
-function trackComparison(comparison) {
+function trackComparison(comparison, wasHumanClick) {
     const pointer = mode === "LEFT_POINTER" ? leftPointer : rightPointer;
     const pointerValue = arrayOfThings[pointer].toString();
     const stringPivot = pivot.toString();
@@ -136,6 +137,34 @@ function trackComparison(comparison) {
     if (!autoSortTracker[pointerValue][stringPivot]) {
         autoSortTracker[pointerValue][stringPivot] = getReverseComparison(comparison);
     }
+    if (wasHumanClick) {
+        actionTracker.push(comparison);
+    }
+}
+function handleUndo() {
+    arrayOfThings = originalArrayOfThings.map((item) => item);
+    tree = new Tree(arrayOfThings);
+    leftPointer = 0;
+    rightPointer = arrayOfThings.length - 1;
+    mode = 'LEFT_POINTER';
+    pivot = arrayOfThings[Math.floor((leftPointer + rightPointer) / 2)];
+    pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2);
+    autoSortTracker = {};
+    skips = 0;
+    const previousActions = actionTracker.slice(0, actionTracker.length - 1);
+    actionTracker = [];
+    previousActions.forEach((action) => {
+        if (action === COMPARISONS.PIVOT_GREATER) {
+            pivotButtonClicked();
+        }
+        else if (action === COMPARISONS.COMPARISON_GREATER) {
+            comparisonButtonClicked();
+        }
+        else if (action === COMPARISONS.EQUAL) {
+            equalToClicked();
+        }
+    });
+    updateVisuals();
 }
 function swapLeftWithRight() {
     let leftValue = arrayOfThings[leftPointer];
@@ -162,7 +191,7 @@ function autoSort() {
         skips++;
     }
     else if (sortAction === COMPARISONS.EQUAL) {
-        equalToClicked(true);
+        equalToClicked(true, false);
         skips++;
     }
     return sortAction !== undefined;
@@ -199,11 +228,11 @@ function resetBattle() {
         if (arrayOfThings[leftPointer] === pivot) {
             window.log(`Skipping duplicate!`);
             skips++;
-            equalToClicked();
+            equalToClicked(false, true);
             if (arrayOfThings[rightPointer] === pivot) {
                 window.log(`Skipping duplicate!`);
                 skips++;
-                equalToClicked();
+                equalToClicked(false, true);
             }
         }
         setOriginalArray();
@@ -280,6 +309,7 @@ function handleSortButtonClick() {
         parsedArray = inputValues.split('\n');
     }
     parsedArray = parsedArray.map((item) => item.trim());
+    originalArrayOfThings = parsedArray.map((item) => item);
     arrayOfThings = parsedArray;
     inputContainer.style.display = 'none';
     sortContainer.style.display = 'flex';

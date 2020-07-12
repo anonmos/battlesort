@@ -96,6 +96,13 @@
     .col {
       margin: 0 30px;
     }
+
+    .undo-row {
+      display: flex;
+      justify-content: space-between;
+      width: 400px;
+      margin-top: 50px;
+    }
   </style>
 </head>
 
@@ -135,6 +142,9 @@
             It's Equal
           </button>
         </div>
+      </div>
+      <div class="undo-row">
+        <button id="undo-button" onclick="handleUndo()">Undo</button>
       </div>
       <div id="debug-row" class="row" style="display: none;">
         <div class="col" id="left-pointer-index">Left Pointer Index</div>
