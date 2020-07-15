@@ -212,7 +212,7 @@ function battleFinished(finalArray) {
     answerStage.style.display = 'flex';
     sortStage.style.display = 'none';
     const outputTextArea = document.getElementById('output');
-    outputTextArea.value = finalArray.join(', ');
+    outputTextArea.value = finalArray.join('\n');
     window.log(`Clicks saved: ${skips}`);
 }
 function resetBattle() {
@@ -304,11 +304,11 @@ function handleSortButtonClick() {
     const inputContainer = document.getElementById('input-stage');
     const sortContainer = document.getElementById('sort-stage');
     const inputValues = sortInput.value;
-    let parsedArray = inputValues.split(',');
+    let parsedArray = inputValues.split('\n');
     if (parsedArray.length === 1) {
-        parsedArray = inputValues.split('\n');
+        parsedArray = inputValues.split(',');
     }
-    parsedArray = parsedArray.map((item) => item.trim());
+    parsedArray = parsedArray.map((item) => item.trim()).filter((item) => item.toString().length > 0);
     originalArrayOfThings = parsedArray.map((item) => item);
     arrayOfThings = parsedArray;
     inputContainer.style.display = 'none';
