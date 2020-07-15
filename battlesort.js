@@ -212,7 +212,7 @@ function battleFinished(finalArray) {
     answerStage.style.display = 'flex';
     sortStage.style.display = 'none';
     const outputTextArea = document.getElementById('output');
-    outputTextArea.value = finalArray.join('\n');
+    outputTextArea.value = finalArray.reverse().join('\n');
     window.log(`Clicks saved: ${skips}`);
 }
 function resetBattle() {
@@ -320,12 +320,12 @@ function handleSortButtonClick() {
     updateVisuals();
 }
 function reverseFinalOrder() {
-    let MODE = ', ';
+    let MODE = '\n';
     const outputTextArea = document.getElementById('output');
-    let finalValuesArray = outputTextArea.value.split(',').map((item) => item.trim());
+    let finalValuesArray = outputTextArea.value.split('\n').map((item) => item.trim());
     if (finalValuesArray.length === 1) {
-        finalValuesArray = outputTextArea.value.split('\n').map((item) => item.trim());
-        MODE = '\n';
+        finalValuesArray = outputTextArea.value.split(',').map((item) => item.trim());
+        MODE = ', ';
     }
     outputTextArea.value = finalValuesArray.reverse().map((item) => item.trim()).join(MODE).trim();
 }
@@ -340,6 +340,10 @@ function swapDelineator() {
     outputTextArea.value = MODE === ',' ? finalValuesArray.map((item) => item.trim()).join('\n').trim() : finalValuesArray.map((item) => item.trim()).join(', ').trim();
 }
 window.onload = function () {
+    const sortInput = document.getElementById('input');
+    sortInput.value = "Do dishes\nRake leaves\nVaccum, dust, sweep\nPet cat\nWalk dog\nBake a pie\nRead a book\nPlant a tree\nMake bed\nMop kitchen";
+};
+window.setDebugInputValues = function () {
     const sortInput = document.getElementById('input');
     sortInput.value = "1, 2, 5, 6, 4, 3, 7, 5, 10, 1, 1, 1, 10, 8";
 };

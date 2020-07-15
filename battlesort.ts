@@ -234,7 +234,7 @@ function battleFinished(finalArray: Array<string | number>) {
     sortStage!.style.display = 'none'
     const outputTextArea: HTMLTextAreaElement = document.getElementById('output') as HTMLTextAreaElement
 
-    outputTextArea.value = finalArray.join('\n')
+    outputTextArea.value = finalArray.reverse().join('\n')
     window.log(`Clicks saved: ${skips}`)
 }
 
@@ -362,13 +362,13 @@ function handleSortButtonClick() {
 }
 
 function reverseFinalOrder() {
-    let MODE = ', '
+    let MODE = '\n'
     const outputTextArea: HTMLTextAreaElement = document.getElementById('output') as HTMLTextAreaElement
-    let finalValuesArray = outputTextArea.value.split(',').map((item) => item.trim())
+    let finalValuesArray = outputTextArea.value.split('\n').map((item) => item.trim())
 
     if (finalValuesArray.length === 1) {
-        finalValuesArray = outputTextArea.value.split('\n').map((item) => item.trim())
-        MODE = '\n'
+        finalValuesArray = outputTextArea.value.split(',').map((item) => item.trim())
+        MODE = ', '
     }
 
     outputTextArea.value = finalValuesArray.reverse().map((item) => item.trim()).join(MODE).trim()
@@ -388,6 +388,11 @@ function swapDelineator() {
 }
 
 window.onload = function () {
+    const sortInput: HTMLTextAreaElement = document.getElementById('input') as HTMLTextAreaElement
+    sortInput.value = "Do dishes\nRake leaves\nVaccum, dust, sweep\nPet cat\nWalk dog\nBake a pie\nRead a book\nPlant a tree\nMake bed\nMop kitchen"
+}
+
+window.setDebugInputValues = function () {
     const sortInput: HTMLTextAreaElement = document.getElementById('input') as HTMLTextAreaElement
     sortInput.value = "1, 2, 5, 6, 4, 3, 7, 5, 10, 1, 1, 1, 10, 8"
 }

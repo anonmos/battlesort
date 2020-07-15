@@ -7,4 +7,5 @@ interface Window {
     disableDebug: () => void
     log: (logContent: string) => void
     triggerBattleFinished: () => void
+    setDebugInputValues: () => void
 }
