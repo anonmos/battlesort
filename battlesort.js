@@ -220,6 +220,20 @@ function resetBattle() {
         done = true;
     }
 }
+function simulateButtonPress(button) {
+    let buttonId = 'equal-button';
+    if (button === COMPARISONS.PIVOT_GREATER) {
+        buttonId = 'pivot-button';
+    }
+    else if (button === COMPARISONS.COMPARISON_GREATER) {
+        buttonId = 'comparison-button';
+    }
+    let buttonElement = document.getElementById(buttonId);
+    buttonElement.classList.add('active');
+    setTimeout(() => {
+        buttonElement.classList.remove('active');
+    }, 100);
+}
 function updateLeftPointerIndexValue() {
     updateElement('left-pointer-index', `Left Pointer Index: ${leftPointer}`);
 }
@@ -273,12 +287,15 @@ function keyEventHandler(event) {
     }
     if (event.key === 'ArrowRight') {
         pivotButtonClicked();
+        simulateButtonPress(COMPARISONS.PIVOT_GREATER);
     }
     else if (event.key === 'ArrowLeft') {
         comparisonButtonClicked();
+        simulateButtonPress(COMPARISONS.COMPARISON_GREATER);
     }
     else if (event.key === 'ArrowDown') {
         equalToClicked();
+        simulateButtonPress(COMPARISONS.EQUAL);
     }
     if ((event.metaKey || event.ctrlKey) && event.key === 'z') {
         handleUndo();
