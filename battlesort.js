@@ -200,6 +200,7 @@ function battleFinished(finalArray) {
     const outputTextArea = document.getElementById('output');
     outputTextArea.value = finalArray.reverse().join('\n');
     window.log(`Clicks saved: ${skips}`);
+    document.removeEventListener('keydown', keyEventHandler);
 }
 function resetBattle() {
     const nextArray = tree.getNextNodeArray(arrayOfThings, leftPointer, leftPointer + 1);
@@ -263,6 +264,26 @@ function updateElement(id, value) {
         // element is probably off, swallow the error
     }
 }
+function keyEventHandler(event) {
+    const keyName = event.key;
+    window.log(`Handling key: ${keyName}`);
+    if (keyName === 'Control') {
+        // Don't do anything on "just" a control press
+        return;
+    }
+    if (event.key === 'ArrowRight') {
+        pivotButtonClicked();
+    }
+    else if (event.key === 'ArrowLeft') {
+        comparisonButtonClicked();
+    }
+    else if (event.key === 'ArrowDown') {
+        equalToClicked();
+    }
+    if ((event.metaKey || event.ctrlKey) && event.key === 'z') {
+        handleUndo();
+    }
+}
 function updateVisuals() {
     updateLeftPointerIndexValue();
     updateRightPointerIndexValue();
@@ -293,6 +314,7 @@ function handleSortButtonClick() {
     pivotPointerIndex = Math.floor((leftPointer + rightPointer) / 2);
     setOriginalArray();
     updateVisuals();
+    document.addEventListener('keydown', keyEventHandler);
 }
 function reverseFinalOrder() {
     let MODE = '\n';
