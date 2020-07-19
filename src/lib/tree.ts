@@ -1,4 +1,7 @@
-class Tree {
+import TreeNode from "./tree-node"
+import Logger from "./logger"
+
+export default class Tree {
     private currentNode: TreeNode
     private rootNode: TreeNode
     private gatheredLeaves: Array<string | number> = []
@@ -9,21 +12,21 @@ class Tree {
 
     public getNextNodeArray(solvedArr: Array<string | number>, leftEndIndex: number, rightBeginIndex: number) {
         this.currentNode.solvedArr = solvedArr
-        window.log(`Setting solved array: ${JSON.stringify(solvedArr)}`)
+        Logger.log(`Setting solved array: ${JSON.stringify(solvedArr)}`)
         this.currentNode.leftEndIndex = leftEndIndex
         this.currentNode.rightBeginIndex = rightBeginIndex
 
         if (this.currentNode.solvedArr.length === 2) {
-            window.log(`Finished block`)
+            Logger.log(`Finished block`)
             this.currentNode.left = new TreeNode([this.currentNode.solvedArr[0]])
-            window.log(`Setting finished left: ${JSON.stringify(this.currentNode.left.solvedArr)}`)
+            Logger.log(`Setting finished left: ${JSON.stringify(this.currentNode.left.solvedArr)}`)
             this.currentNode.right = new TreeNode([this.currentNode.solvedArr[1]])
-            window.log(`Setting finished left: ${JSON.stringify(this.currentNode.right.solvedArr)}`)
+            Logger.log(`Setting finished left: ${JSON.stringify(this.currentNode.right.solvedArr)}`)
         } else {
             this.currentNode.left = new TreeNode(this.currentNode.solvedArr.slice(0, this.currentNode.leftEndIndex))
             this.currentNode.right = new TreeNode(this.currentNode.solvedArr.slice(this.currentNode.rightBeginIndex - 1, this.currentNode.solvedArr.length))
-            window.log(`Setting left: ${JSON.stringify(this.currentNode.left.arr)}`)
-            window.log(`Setting right: ${JSON.stringify(this.currentNode.right.arr)}`)
+            Logger.log(`Setting left: ${JSON.stringify(this.currentNode.left.arr)}`)
+            Logger.log(`Setting right: ${JSON.stringify(this.currentNode.right.arr)}`)
         }
 
         const potentialNextNode = this.findNextNode()

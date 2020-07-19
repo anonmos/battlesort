@@ -1,0 +1,36 @@
+{
+  "name": "battlesort",
+  "version": "1.0.0",
+  "description": "Enables event-driven, one-by-one comparison sorting of a list of things",
+  "main": "src/battlesort.js",
+  "dependencies": {},
+  "devDependencies": {
+    "rollup": "^2.22.1",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.7"
+  },
+  "scripts": {
+    "clean": "rm src/**/*.js; rm src/*.js; rm -rf dist/",
+    "build": "node_modules/.bin/tsc",
+    "watch": "node_modules/.bin/tsc -w",
+    "bundle": "yarn run clean; node_modules/.bin/rollup --config rollup.config.js",
+    "bundle:demo": "yarn run clean; node_modules/.bin/rollup --config rollup.config.js; yarn run build; cp src/demo.js dist/; cp index.html dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anonmos/battlesort.git"
+  },
+  "keywords": [
+    "Battlesort",
+    "sorting",
+    "sort"
+  ],
+  "author": "Tim Growney & Jesse Avshalomov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anonmos/battlesort/issues"
+  },
+  "homepage": "https://github.com/anonmos/battlesort#readme"
+}

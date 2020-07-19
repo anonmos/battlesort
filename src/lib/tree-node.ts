@@ -1,4 +1,4 @@
-class TreeNode {
+export default class TreeNode {
     public parent?: TreeNode
     public left?: TreeNode
     public right?: TreeNode

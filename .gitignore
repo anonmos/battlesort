@@ -1,0 +1,8 @@
+node_modules
+*.js
+!rollup.config.js
+!dist
+!dist/*.js
+dist/demo.js
+dist/index.html
+.DS_Store
