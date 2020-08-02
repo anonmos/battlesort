@@ -18,7 +18,7 @@
   "scripts": {
     "clean": "rm src/**/*.js; rm src/*.js; rm -rf dist/; rm tests/*.js",
     "build": "node_modules/.bin/tsc",
-    "build-node": "node_modules/.bin/tsc --target es3 --module commonjs",
+    "build-node": "node_modules/.bin/tsc --target ES2015 --module commonjs",
     "watch": "node_modules/.bin/tsc -w",
     "bundle": "yarn run clean; node_modules/.bin/rollup --config rollup.config.js",
     "bundle:demo": "yarn run clean; node_modules/.bin/rollup --config rollup.config.js; yarn run build; cp src/demo.js dist/; cp index.html dist/",

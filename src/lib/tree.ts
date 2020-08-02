@@ -74,8 +74,10 @@ export default class Tree {
     }
 
     public getFinalArray(): Array<string | number> {
-        this.gatherLeaves(this.rootNode)
+        if (this.gatheredLeaves.length === 0) {
+            this.gatherLeaves(this.rootNode)
+        }
+
         return this.gatheredLeaves
     }
-
 }

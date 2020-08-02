@@ -256,6 +256,10 @@ export default class Battlesort {
         return this.getDisplayables()
     }
 
+    public getFinalSortedValues() {
+        return this.done ? this.tree.getFinalArray() : []
+    }
+
     public getDebugValues() {
         return {leftPointer: this.leftPointer, leftPointerValue: this.arrayOfThings[this.leftPointer], rightPointer: this.rightPointer, rightPointerValue: this.arrayOfThings[this.rightPointer], pivot: this.pivotPointerIndex, pivotValue: this.pivot, arrayOfThings: this.arrayOfThings, mode: this.mode, done: this.done}
     }
