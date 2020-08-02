@@ -129,10 +129,6 @@ suite('Battlesort tests', function() {
         Assert.equal(battlesort.getFinalSortedValues().length, 0)
     })
 
-    test('Test failing CI GitHub tag', function() {
-        Assert.ok(false)
-    })
-
     function stepForward() {
         const displayables = battlesort.getDisplayables()
         if (displayables.comparison > displayables.pivot) {
