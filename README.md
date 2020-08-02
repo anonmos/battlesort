@@ -1,4 +1,4 @@
-# BattleSort
+# BattleSort ![CI Shield](https://img.shields.io/circleci/build/github/anonmos/battlesort/main)
 Where only the best choices happen.
 
 BattleSort allows you, user, to input a full list of unordered things, compare them one-by-one, then receive the ordered list on the other side.  Want to see it live?  Check out the [demo](https://battlesort.timgrowney.com).
