@@ -118,7 +118,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0;
+      margin: 5px;
+      position: fixed;
+      left: 10px;
+      bottom: 10px;
     }
 
     svg:hover {
@@ -135,11 +138,18 @@
       margin-top: 30px;
       color: gray;
       font-size: 13px;
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
     }
 
     span.shortcuts-title {
       font-weight: bold;
     }
+    
+    #main-question {
+    font-size: 20px;
+}
   </style>
 </head>
 
@@ -158,8 +168,8 @@
     <div id="sort-stage" class="sort-stage" style="display: none;">
       <div class="displayables">
         <h1>BattleSort</h1>
-        <p id="main-question" class="lead">Which of these items is <span style="font-weight: bold; background-color: yellow;"
-            id="comparison">greater?</span></p>
+        <p id="main-question" class="lead">Which of these items is more <span style="font-weight: bold; background-color: yellow;"
+            id="comparison">important?</span></p>
       </div>
       <div class="row">
         <div class="col">
