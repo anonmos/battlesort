@@ -172,7 +172,7 @@ function swapDelineator() {
 
 window.onload = function () {
     const sortInput: HTMLTextAreaElement = document.getElementById('input') as HTMLTextAreaElement
-    sortInput.value = "Do dishes\nRake leaves\nVaccum, dust, sweep\nPet cat\nWalk dog\nBake a pie\nRead a book\nPlant a tree\nMake bed\nMop kitchen"
+    sortInput.value = "Do dishes\nRake leaves\nVacuum, dust, sweep\nPet cat\nWalk dog\nBake a pie\nRead a book"
 }
 
 window.setDebugInputValues = function () {
