@@ -148,8 +148,17 @@
     }
     
     #main-question {
-    font-size: 20px;
-}
+      font-size: 20px;
+    }
+    
+    #sorting_brand {
+      position: fixed;
+      left: 5px;
+      top: 0px;
+      margin: 10px; 
+      color: lightgray;
+    }  
+    
   </style>
 </head>
 
@@ -167,7 +176,7 @@
     </div>
     <div id="sort-stage" class="sort-stage" style="display: none;">
       <div class="displayables">
-        <h1>BattleSort</h1>
+        <h1 id="sort-stage-title">BattleSort</h1>
         <p id="main-question" class="lead">Which of these items is more <span style="font-weight: bold; background-color: yellow;"
             id="comparison">important?</span></p>
       </div>
